@@ -118,7 +118,7 @@ public class TableActivity extends AppCompatActivity {
 
             }
         });
-
+        //주문버튼
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +142,7 @@ public class TableActivity extends AppCompatActivity {
                 finish();
             }
         });
+        //결제버튼
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

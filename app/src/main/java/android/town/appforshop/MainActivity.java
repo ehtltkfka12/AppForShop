@@ -78,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
         adapter.addItem(new TableItem(true, "4",menuItems));
         adapter.addItem(new TableItem(true, "5",menuItems));
         adapter.addItem(new TableItem(true, "6",menuItems));
+        adapter.addItem(new TableItem(true, "7",menuItems));
+        adapter.addItem(new TableItem(true, "8",menuItems));
+        adapter.addItem(new TableItem(true, "9",menuItems));
+        adapter.addItem(new TableItem(true, "10",menuItems));
 
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -109,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             Toast.makeText(getApplicationContext(),
-                    "치킨"+noChicken+
+                    "치킨test"+noChicken+
                             "피자"+noPizza+
                             "테이블"+noTable,Toast.LENGTH_LONG).show();
             if(noChicken==0&&noPizza==0){
