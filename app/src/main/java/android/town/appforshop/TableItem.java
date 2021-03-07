@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class TableItem {
     Boolean isEmpty;
-    String tableNo;
+    String tableNo; //테이블 번호
     ArrayList<MenuItem> menuItems;
-    String totalPrice;
+    String totalPrice; // 총 주문 금액
     int noChicken;
     int noPizza;
 
