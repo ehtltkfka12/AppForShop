@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ShopItem"></activity>
+        <activity android:name=".CustomerMainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +23,9 @@
         </activity>
         <activity
             android:name=".TableActivity"
-            android:label="테이블 액티비티"></activity>
+            android:label="테이블 액티비티" />
         <activity android:name=".ShopMainActivity">
-=
+            =
         </activity>
     </application>
 
