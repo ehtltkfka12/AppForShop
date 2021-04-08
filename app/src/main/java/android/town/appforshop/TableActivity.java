@@ -109,7 +109,7 @@ public class TableActivity extends AppCompatActivity {
                    listView.setAdapter(menuAdapter);
                    spinner.setAdapter(adapter);
                }
-                Toast.makeText(getApplicationContext(),"선택"+position,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"선택"+position,Toast.LENGTH_LONG).show();
             }
 
 
@@ -133,7 +133,7 @@ public class TableActivity extends AppCompatActivity {
                         noPizza++;
                     }
                 }
-                Toast.makeText(getApplicationContext(), noChicken+","+noPizza, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), noChicken+","+noPizza, Toast.LENGTH_LONG).show();
                 intent.putExtra("noChicken",noChicken);
                 intent.putExtra("noPizza",noPizza);
                 intent.putExtra("noTable",tableNo);

@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
        btn_Shop.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Intent intent=new Intent(getApplicationContext(),ShopMainActivity.class);
+               Intent intent=new Intent(getApplicationContext(),ShopLoginActivity.class);
                startActivity(intent);
            }
        });

@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ShopItem"></activity>
+        <activity android:name=".ShopLoginActivity"></activity>
+        <activity android:name=".ShopItem" />
         <activity android:name=".CustomerMainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

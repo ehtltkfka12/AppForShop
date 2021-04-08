@@ -1,17 +1,19 @@
 package android.town.appforshop;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -19,18 +21,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class CustomerMainActivity extends AppCompatActivity {
-    public static final int REQUEST_CODE_MENU = 101;
+
+public class ShopLoginActivity extends AppCompatActivity {
 
     private static String IP_ADDRESS = "34.64.190.134";
-    private static String TAG = "queryData";
+    private static String TAG = "login";
 
     private static final String TAG_JSON="ehtltkfka12";
     private static final String TAG_ID = "id";
@@ -38,81 +43,43 @@ public class CustomerMainActivity extends AppCompatActivity {
     private static final String TAG_EMPTY = "empty";
     private static final String TAG_TOTAL ="total";
 
+    private EditText editTextName;
+    private EditText editTextPW;
+    private TextView mTextViewLogin;
     String mJsonString;
-
-    class ShopAdapter extends BaseAdapter {
-        ArrayList<ShopItem> items = new ArrayList<>();
-
-        public void addItem(ShopItem item) {
-            items.add(item);
-        }
-
-        @Override
-        public int getCount() {
-            return items.size();
-        }
-
-        @Override
-        public ShopItem getItem(int position) {
-            return items.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ShopItemView view = new ShopItemView(getApplicationContext());
-            ShopItem item = items.get(position);
-            view.setName(item.getName());
-            view.setEmptyNo(item.getNoEmpty());
-            view.setAllTableNo(item.getNoAllTable());
-
-            return view;
-        }
-    }
-
-
-    GridView gridView;
-    ShopAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_main);
+        setContentView(R.layout.activity_shop_login);
 
-        gridView = (GridView) findViewById(R.id.gridView2);
-        adapter = new ShopAdapter();
+        editTextName = (EditText)findViewById(R.id.editText_name);
+        editTextPW = (EditText)findViewById(R.id.editText_pw);
+        mTextViewLogin=(TextView)findViewById(R.id.mTextViewResult);
 
-        //서버에서 데이터 가져와 갱신
-        QueryData task=new QueryData();
-        task.execute("http://" + IP_ADDRESS + "/queryData.php");
-
-
-
-        /*adapter.addItem(new ShopItem("a",2,10));
-        adapter.addItem(new ShopItem("b",3,20));
-        adapter.addItem(new ShopItem("c",10,15));*/
-
-        gridView.setAdapter(adapter);
-  /*
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        Button buttonLogin = (Button)findViewById(R.id.btn_login);
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ShopItem item = (ShopItem) adapter.getItem(position);
-                Intent intent = new Intent(getApplicationContext(), TableActivity.class);
-                intent.putExtra("tableNo", position);
-                intent.putExtra("noChicken",item.getNoChicken());
-                intent.putExtra("noPizza",item.getNoPizza());
-                startActivityForResult(intent, REQUEST_CODE_MENU);
+            public void onClick(View v) {
+
+                String name = editTextName.getText().toString();
+                String password = editTextPW.getText().toString();
+
+                Login task = new Login();
+                task.execute("http://" + IP_ADDRESS + "/loginQuery.php", name,password);
+
+
+                editTextName.setText("");
+                editTextPW.setText("");
+
             }
         });
-*/
 
     }
-    class QueryData extends AsyncTask<String, Void, String> {
+
+
+
+    class Login extends AsyncTask<String, Void, String>{
         ProgressDialog progressDialog;
         String errorString="이름과 비밀번호가 일치하지 않습니다.";
 
@@ -120,7 +87,7 @@ public class CustomerMainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = ProgressDialog.show(CustomerMainActivity.this,
+            progressDialog = ProgressDialog.show(ShopLoginActivity.this,
                     "Please Wait", null, true, true);
         }
 
@@ -130,27 +97,43 @@ public class CustomerMainActivity extends AppCompatActivity {
             super.onPostExecute(result);
 
             progressDialog.dismiss();
-            //Toast.makeText(getApplicationContext(),result+"!!!",Toast.LENGTH_LONG);
+
+            if (errorString.equals(result)){
+
+                mTextViewLogin.setText(errorString);
+            }
+            else {
+
                 mJsonString = result;
                 ArrayList<String> mResult = new ArrayList<>();
                 mResult=showResult();
-            //Toast.makeText(getApplicationContext(),mResult.get(1),Toast.LENGTH_LONG);
-                adapter.addItem(new ShopItem(mResult.get(1),Integer.parseInt(mResult.get(2)),Integer.parseInt(mResult.get(3))));
-            adapter.addItem(new ShopItem(mResult.get(5),Integer.parseInt(mResult.get(6)),Integer.parseInt(mResult.get(7))));
-            adapter.addItem(new ShopItem(mResult.get(9),Integer.parseInt(mResult.get(10)),Integer.parseInt(mResult.get(11))));
-            gridView.setAdapter(adapter);
+                //mTextViewLogin.setText(result);
+                Intent intent=new Intent(getApplicationContext(),ShopMainActivity.class);
+                if(mResult.size()==0){
+                    mTextViewLogin.setText(result);
+                }
+                else{
+                    intent.putExtra("name",mResult.get(1));
+                    int emptyTable=Integer.parseInt(mResult.get(2));
+                    intent.putExtra("empty",emptyTable);
+                    int totalTable=Integer.parseInt(mResult.get(3));
+                    intent.putExtra("total",totalTable);
+                    startActivity(intent);
+                }
 
+            }
             Log.d(TAG, "POST response  - " + result);
-            Log.d(TAG, "POST response  - " + mResult.get(1)+mResult.get(5)+mResult.get(9));
         }
 
 
         @Override
         protected String doInBackground(String... params) {
 
+            String name = (String)params[1];
+            String password = (String)params[2];
 
             String serverURL = (String)params[0];
-            String postParameters = "";
+            String postParameters = "name=" + name + "&password=" + password;
 
 
             try {
@@ -243,4 +226,6 @@ public class CustomerMainActivity extends AppCompatActivity {
         }
         return tmp;
     }
-    }
+
+
+}
